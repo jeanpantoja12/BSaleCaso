@@ -31,3 +31,13 @@ class Product(models.Model):
     class Meta:
         managed = False
         db_table = 'product'
+
+    def serialize(self):
+        return{
+            "id": self.id,
+            "nombre": self.name,
+            "img": self.url_image,
+            "precio": self.price,
+            "desc": self.discount,
+            "categoria": self.category.name
+        }

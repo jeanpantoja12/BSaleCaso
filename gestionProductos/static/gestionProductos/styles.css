@@ -1,0 +1,19 @@
+
+.custom-logo{
+    color: #e07000 !important;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.custom-buttom{
+    background-color: #e07000;
+    color: white;
+}
+
+#search-form{
+    width:150px;
+    transition:width .5s ease
+}
+#search-form:focus{
+    width:300px
+}

@@ -1,0 +1,54 @@
+{% extends "gestionProductos/layout.html" %}
+{% load static %}
+
+{% block body %}
+
+    <div class="col-md-10" style="margin: auto;">
+        <h3>Resultados</h3>
+        <br/>
+        <h4 id="title-search"></h4>
+        <hr/>
+        
+        <br/>
+        <div id="search-container" class="col-md-12 shadow p-3 mb-5 bg-white rounded-lg border-info">
+            <!-- <div class="col-md-12 containers">
+                <div class="row">
+                    <div class="col-md-4">
+                        <a href="#"><img style="width: 200px;height: 200px;display: block; margin: auto;" src="https://static01.nyt.com/images/2021/04/01/dining/01next1/merlin_185496183_777290b3-7f9e-42b9-acee-0b1c3a1b3d4d-superJumbo.jpg"></a>
+                    </div>
+                    <div  class="col-md-8">
+                        <h3 style="background-color: #e07000;padding-left: 20px; width: 100%;"><a style="color: white;text-decoration: none;" href="#">Pisco</a></h3>
+                        <br/>
+                        <div class="col-md-12">
+                            <h3 style="display: inline;">S/.12</h3>
+                                <p style="display:inline;text-decoration: line-through;">$.15</p>
+                                <br/>
+                                <h4 style="color: #37b859;">5% OFF</h4>
+                        </div>
+                        
+                        
+                    </div>
+                </div> 
+            </div> -->
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-2" style="margin-left: auto;margin-right: auto;">
+                    <nav style="padding-left: 40%;" aria-label="pagination">
+                        <ul class="pagination">
+                        </ul>
+                      </nav>
+                </div>
+            </div>
+
+            
+        </div>
+    </div>  
+
+{% endblock %}
+
+{% block scripts %}
+
+    <script src="static/gestionProductos/search.js"></script>
+
+{% endblock %}

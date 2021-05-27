@@ -3,32 +3,42 @@ document.addEventListener('DOMContentLoaded',()=>{
     var url_string = window.location.href; //window.location.href
     var url = new URL(url_string);
     var search = url.searchParams.get("s");
-    var page = url.searchParams.get("page")
+    var page = url.searchParams.get("page");
+    var order = url.searchParams.get("order");
     if(search){
+        let headers = '';
+        if(order){
+            headers += `&order=${order}`;
+        }
         if(page){
-            load_data(search,page);
+            
+            load_data(search,page,headers);
         }
         else{
-            load_data(search,1);
+            load_data(search,1,headers);
         }
+        document.querySelector('#filter-container').style.display = 'none';
     }
         
     else
         window.location.href = '/';
 });
 
-function load_data(search,page){
-
-    fetch(`api/search?s=${search}&page=${page}`)
+function load_data(search,page,headers){
+    let loader = '<div class="loader"></div>';
+    let title = search;
+    document.querySelector('#title-search').innerHTML = title;
+    document.querySelector('#search-container').innerHTML = `<div class="col-md-2" style="margin:auto">${loader}</div>`;
+    fetch(`api/search?s=${search}&page=${page}`+headers)
     .then(response => response.json())
     .then(responses => {
-        console.log(responses);
-        // Asignar titulo
-        let title = search;
-        document.querySelector('#title-search').innerHTML = title;
+        document.querySelector('#search-container').innerHTML = '';
         // Asignar paginación
-        load_pagination(responses.num_pages,search);
-        pagination_items(page,responses.has_next,responses.has_prev,search);
+        load_pagination(responses.num_pages,search,headers);
+        pagination_items(page,responses.has_next,responses.has_prev,search,headers);
+        document.querySelector('#filter-container').style.display = 'block';
+        document.querySelector('#less-price').href = `?s=${search}&order=asc`;
+        document.querySelector('#more-price').href = `?s=${search}&order=desc`;
         responses.results.forEach(element => {
             // Creación de Componentes HTML
             const container = document.createElement('div');
@@ -65,7 +75,7 @@ function load_data(search,page){
             row.append(img_container);
             row.append(details_container);
             container.append(row);
-            
+            container.append(document.createElement('hr'));
             //Llenando datos
             img.src = element['img'];
             title_product.innerHTML = element['nombre'];
@@ -84,7 +94,7 @@ function load_data(search,page){
             }
             
             document.querySelector('#search-container').append(container);
-
+            document.querySelector('#search-container').append(document.createElement('br'));
         });
     })
 }
@@ -95,7 +105,7 @@ function calculate_discount(num,discount){
     return + percent;
 }
 
-function load_pagination(num_pages,search){
+function load_pagination(num_pages,search,headers){
     const item = document.createElement('li');
     const reference = document.createElement('a');
     const icon = document.createElement('span');
@@ -112,7 +122,7 @@ function load_pagination(num_pages,search){
         const page = document.createElement('li');
         page.className = 'page-item';
         page.id = `pagination-page-${i}`
-        page.innerHTML = `<a class='page-link' href='?s=${search}&page=${i}'>${i}</a>`
+        page.innerHTML = `<a class='page-link' href='?s=${search}&page=${i}${headers}'>${i}</a>`
         document.querySelector('.pagination').append(page);
     }
     const item2 = document.createElement('li');
@@ -130,18 +140,18 @@ function load_pagination(num_pages,search){
     
 }
 
-function pagination_items(page,has_next,has_prev,search){
+function pagination_items(page,has_next,has_prev,search,headers){
     if(!has_next){
         document.querySelector('#next-page').className = 'page-item disabled'
     }
     else{
-        document.querySelector('#next-page > a').href = `?s=${search}&page=${parseInt(page)+1}`
+        document.querySelector('#next-page > a').href = `?s=${search}&page=${parseInt(page)+1}${headers}`
     }
     if(!has_prev){
         document.querySelector('#prev-page').className = 'page-item disabled'
     }
     else{
-        document.querySelector('#prev-page > a').href = `?s=${search}&page=${parseInt(page)-1}`
+        document.querySelector('#prev-page > a').href = `?s=${search}&page=${parseInt(page)-1}${headers}`
     }
     document.querySelector(`#pagination-page-${page}`).className = 'page-item active';
 }

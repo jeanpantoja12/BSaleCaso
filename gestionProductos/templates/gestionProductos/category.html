@@ -4,9 +4,9 @@
 {% block body %}
 
     <div class="col-md-10" style="margin: auto;">
-        <h3>Resultados</h3>
         <br/>
-        <h4 id="title-search"></h4>
+        <br/>
+        <h2 id="title-category">Categoria</h2>
         <hr/>
         
         <br/>
@@ -22,7 +22,10 @@
               </div>
         </div>
         <br/>
-        <div id="search-container" class="col-md-12 shadow p-3 mb-5 bg-white rounded-lg border-info">
+        <div class="col-md-12 shadow p-3 mb-5 bg-white rounded-lg border-info">
+            <div id="category-container" class="row">
+
+            </div>
             <!-- <div class="col-md-12 containers">
                 <div class="row">
                     <div class="col-md-4">
@@ -44,23 +47,25 @@
             </div> -->
         </div>
         <div class="row">
-            <div class="col-md-12">
-                <div class="col-md-2" style="margin-left: auto;margin-right: auto;">
-                    <nav style="padding-left: 40%;" aria-label="pagination">
-                        <ul class="pagination">
-                        </ul>
-                      </nav>
+            <div class="col-md-10" style="margin: auto;">
+                <div class="col-md-2" id="loader-container" style="margin-left: auto;margin-right: auto;">
+                    
+                </div>
+                <br/>
+                <div class="col-md-2" id="button-container" style="margin-left: auto;margin-right: auto;">
+                    
                 </div>
             </div>
 
             
         </div>
+        <br/>
     </div>  
 
 {% endblock %}
 
 {% block scripts %}
 
-    <script src="static/gestionProductos/search.js"></script>
+    <script src="static/gestionProductos/category.js"></script>
 
 {% endblock %}

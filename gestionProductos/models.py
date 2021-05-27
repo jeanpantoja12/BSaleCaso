@@ -15,9 +15,11 @@ class Category(models.Model):
     class Meta:
         managed = False
         db_table = 'category'
+    
     def serialize(self):
         return{
-            ""
+            "id": self.id,
+            "nombre": self.name
         }
 
 class Product(models.Model):

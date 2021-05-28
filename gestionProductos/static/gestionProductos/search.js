@@ -1,12 +1,14 @@
 
 document.addEventListener('DOMContentLoaded',()=>{
-    var url_string = window.location.href; //window.location.href
-    var url = new URL(url_string);
-    var search = url.searchParams.get("s");
-    var page = url.searchParams.get("page");
-    var order = url.searchParams.get("order");
-    var from = url.searchParams.get("from_s");
-    var to = url.searchParams.get("to_s");
+    // Parámetros
+    let url_string = window.location.href;
+    let url = new URL(url_string);
+    let search = url.searchParams.get("s");
+    let page = url.searchParams.get("page");
+    let order = url.searchParams.get("order");
+    let from = url.searchParams.get("from_s");
+    let to = url.searchParams.get("to_s");
+    // Validación
     if(search){
         let headers = '';
         if (order){
@@ -45,6 +47,7 @@ document.addEventListener('DOMContentLoaded',()=>{
         window.location.href = '/';
 });
 
+// Cambiar parámetros
 function setGetParameter(url,paramName, paramValue)
 {
   var url = url;
@@ -69,6 +72,7 @@ function setGetParameter(url,paramName, paramValue)
   return (url + hash);
 }
 
+// Borrar parámetros
 function removeParameter(key, sourceURL) {
     var rtn = sourceURL.split("?")[0],
         param,
@@ -219,16 +223,12 @@ function pagination_items(page,has_next,has_prev,search,headers){
     document.querySelector(`#pagination-page-${page}`).className = 'page-item active';
 }
 
-function load_filters(obj,search,headers){
-    var highest = Math.max.apply(Math, obj.map(function(o) { return o.precio; }))
-    console.log(obj);
-    var lowest = Math.min.apply(Math, obj.map(function(o) { return o.precio; }))
-    var medium = (highest+lowest)/2;
-    console.log(medium)
-    console.log(lowest)
-    console.log(highest)
-    var header_low = setGetParameter(window.location.href,'to_s',medium);
-    var header_high = setGetParameter(window.location.href,'from_s',medium);
+function load_filters(obj){
+    let highest = Math.max.apply(Math, obj.map(function(o) { return o.precio; }))
+    let lowest = Math.min.apply(Math, obj.map(function(o) { return o.precio; }))
+    let medium = (highest+lowest)/2;
+    let header_low = setGetParameter(window.location.href,'to_s',medium);
+    let header_high = setGetParameter(window.location.href,'from_s',medium);
     header_high = setGetParameter(header_high,'to_s',highest);
     
     document.querySelector('#low-price-filter').innerHTML = `<a style="text-decoration: none;color: black;" href="${header_low}">Hasta $.${medium}</a>`;
@@ -240,25 +240,23 @@ function load_filters(obj,search,headers){
 }
 
 function load_filter_search(){
-    var min = document.querySelector('#min-filter').value;
-    var max = document.querySelector('#max-filter').value;
-    var url_filter = '';
+    let min = document.querySelector('#min-filter').value;
+    let max = document.querySelector('#max-filter').value;
+    let url_filter = '';
     if (min && max){
         url_filter = setGetParameter(window.location.href,'from_s',min);
         url_filter = setGetParameter(url_filter,'to_s',max);
     }
     else{
         if (min){
-            var url_filter = removeParameter('to_s',window.location.href);
+            url_filter = removeParameter('to_s',window.location.href);
             url_filter = setGetParameter(url_filter,'from_s',min);
             
         }
         else{
-            var url_filter = removeParameter('from_s',window.location.href);
+            url_filter = removeParameter('from_s',window.location.href);
             url_filter = setGetParameter(url_filter,'to_s',max);
         }
     }
-    
-    console.log(url_filter);
     window.location.href = url_filter;
 }

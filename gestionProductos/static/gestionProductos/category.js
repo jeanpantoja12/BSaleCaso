@@ -1,9 +1,10 @@
 document.addEventListener('DOMContentLoaded',()=>{
-    var url_string = window.location.href; //window.location.href
-    var url = new URL(url_string);
-    var cat = url.searchParams.get("c");
-    var order = url.searchParams.get("order");
-
+    // Parámetros
+    let url_string = window.location.href;
+    let url = new URL(url_string);
+    let cat = url.searchParams.get("c");
+    let order = url.searchParams.get("order");
+    // Validación
     if(cat){
         let headers = '';
         if(order){

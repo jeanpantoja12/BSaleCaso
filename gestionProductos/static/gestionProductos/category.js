@@ -3,10 +3,19 @@ document.addEventListener('DOMContentLoaded',()=>{
     var url = new URL(url_string);
     var cat = url.searchParams.get("c");
     var order = url.searchParams.get("order");
+
     if(cat){
         let headers = '';
         if(order){
             headers += `?order=${order}`;
+            if (order === 'asc'){
+                document.querySelector('#more-price').classList.remove('active');
+                document.querySelector('#less-price').classList.add('active');
+            }
+            else if(order === 'desc'){
+                document.querySelector('#more-price').classList.add('active');
+                document.querySelector('#less-price').classList.remove('active');
+            }
         }
         load_data(cat,1,headers)
         document.querySelector('#filter-container').style.display = 'none';
@@ -17,11 +26,14 @@ document.addEventListener('DOMContentLoaded',()=>{
 });
 
 function load_data(cat,num,headers){
+    // Título de la Categoría
     let title = cat
     title = title.charAt(0).toUpperCase() + title.slice(1);
+    // Icono de carga
     let loader = '<div class="loader"></div>';
     document.querySelector('#loader-container').innerHTML = loader;
     document.querySelector('#title-category').innerHTML = title;
+    // Instancia de API
     fetch(`api/categories/search/${cat}/${num}`+headers)
     .then(response => response.json())
     .then(responses =>{
@@ -114,9 +126,4 @@ function load_data(cat,num,headers){
         document.querySelector('#category-container').innerHTML = '<div class="col-md-12"><h3>No hay articulos en esta sección.</h3></div>';
     });
     
-}
-function calculate_discount(num,discount){
-    percent = (1-(discount/num))*100;
-    percent = (Math.round(percent+"e+1") + "e-2");
-    return + percent;
 }

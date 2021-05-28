@@ -4,6 +4,7 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect,JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
+from django.db.models import Q
 from django.core.paginator import Paginator
 from .models import Product,Category
 # Vistas para renderizar
@@ -24,13 +25,26 @@ def category_search(request):
 def search_api(request):
     product = request.GET.get('s','') 
     order = request.GET.get('order',None)
+    from_search = request.GET.get('from_s',None)
+    to_search = request.GET.get('to_s',None)
+    if from_search and to_search:
+        queryset = (Q(name__icontains=product,price__gte=from_search,price__lte=to_search))
+    else:
+        if from_search:
+            queryset = (Q(name__icontains=product,price__gte=from_search))
+        elif to_search:
+            queryset = (Q(name__icontains=product,price__lte=to_search))
+        else:
+            queryset = (Q(name__icontains=product))
+
     if order is not None:
         if order == 'asc':
-            result = Product.objects.filter(name__icontains=product).order_by('price')
+            result = Product.objects.filter(queryset).order_by('price')
         elif order == 'desc':
-            result = Product.objects.filter(name__icontains=product).order_by('-price')
+            result = Product.objects.filter(queryset).order_by('-price')
     else:
-        result = Product.objects.filter(name__icontains=product).order_by('-price')
+        result = Product.objects.filter(queryset).order_by('-price')
+    print(queryset)
     paginator = Paginator(result, 10)
     actual_page = request.GET.get('page',1)
     print(actual_page)
@@ -52,7 +66,7 @@ def categorysearch_api(request,cat,num):
     try:
         category = Category.objects.get(name=cat)
     except Category.DoesNotExist:
-        return JsonResponse({"error": "Category not found."}, status=404)
+        return JsonResponse({"error": "Categoria no encontrada."}, status=404)
     order = request.GET.get('order', None)
     if order is not None:
         if order == 'asc':

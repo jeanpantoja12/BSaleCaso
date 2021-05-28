@@ -3,57 +3,18 @@
 {% load static %}
 {% block body %}
 
-    <div  style="margin: auto;" class="col-md-10 shadow p-3 mb-5 bg-white rounded-lg border-info">
+    <div  style="margin: auto;" class="col-md-10 shadow p-3 mb-5 bg-light rounded-lg border-info">
         <h4>Lo más nuevo</h4>
         <hr/>
         <br/>
         <div class="col-md-12">
-            <div class="row">
-                <div style="margin-bottom: 20px;" class="col-lg-3 col-md-4 shadow containers">
-                    <br>
-                    <a href="#" style="text-decoration:none;">
-                        <img style="width: 100px;height:100px;display: block;margin: auto;" src="https://static01.nyt.com/images/2021/04/01/dining/01next1/merlin_185496183_777290b3-7f9e-42b9-acee-0b1c3a1b3d4d-superJumbo.jpg">
-                        <p style="text-align: center;padding-top: 5px;color: black;"><b>Wine</b></p>
-                        <p style="text-align: center;color: #919191;text-decoration: line-through;">$.120</p>
-                        <p style="text-align: center;font-size: 20px;color:black">$.111</p>
-                        <p style="color: #37b859;text-align: center;font-weight: bold;">5%OFF</p>
-                    </a>  
-                </div>
-                <div style="margin-bottom: 20px;" class="col-lg-3 col-md-4 shadow containers">
-                    <br>
-                    <a href="#" style="text-decoration:none;">
-                        <img style="width: 100px;height:100px;display: block;margin: auto;" src="https://static01.nyt.com/images/2021/04/01/dining/01next1/merlin_185496183_777290b3-7f9e-42b9-acee-0b1c3a1b3d4d-superJumbo.jpg">
-                        <p style="text-align: center;padding-top: 5px;color: black;"><b>Wine</b></p>
-                        <p style="text-align: center;font-size: 20px;color:#919191">$.111</p>
-                        
-                    </a>  
-                </div>
-                <div style="margin-bottom: 20px;" class="col-lg-3 col-md-4 shadow containers">
-                    <br>
-                    <a href="#" style="text-decoration:none;">
-                        <img style="width: 100px;height:100px;display: block;margin: auto;" src="https://static01.nyt.com/images/2021/04/01/dining/01next1/merlin_185496183_777290b3-7f9e-42b9-acee-0b1c3a1b3d4d-superJumbo.jpg">
-                        <p style="text-align: center;padding-top: 5px;color: black;"><b>Wine</b></p>
-                        <p style="text-align: center;font-size: 20px;color:#919191">$.111</p>
-                    </a>  
-                </div>
-                <div style="margin-bottom: 20px;" class="col-lg-3 col-md-4 shadow containers">
-                    <br>
-                    <a href="#" style="text-decoration:none;">
-                        <img style="width: 100px;height:100px;display: block;margin: auto;" src="https://static01.nyt.com/images/2021/04/01/dining/01next1/merlin_185496183_777290b3-7f9e-42b9-acee-0b1c3a1b3d4d-superJumbo.jpg">
-                        <p style="text-align: center;padding-top: 5px;color: black;"><b>Wine</b></p>
-                        <p style="text-align: center;font-size: 20px;color:#919191">$.111</p>
-                    </a>  
-                </div>
-                <div style="margin-bottom: 20px;" class="col-lg-3 col-md-4 shadow containers">
-                    <br>
-                    <a href="#" style="text-decoration:none;">
-                        <img style="width: 100px;height:100px;display: block;margin: auto;" src="https://static01.nyt.com/images/2021/04/01/dining/01next1/merlin_185496183_777290b3-7f9e-42b9-acee-0b1c3a1b3d4d-superJumbo.jpg">
-                        <p style="text-align: center;padding-top: 5px;color: black;"><b>Wine</b></p>
-                        <p style="text-align: center;font-size: 20px;color:#919191">$.111</p>
-                    </a>  
-                </div>
+            <div id="index-container" class="row">
             </div>
 
         </div>
     </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="static/gestionProductos/index.js"></script>
 {% endblock %}

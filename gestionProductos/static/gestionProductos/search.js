@@ -5,10 +5,29 @@ document.addEventListener('DOMContentLoaded',()=>{
     var search = url.searchParams.get("s");
     var page = url.searchParams.get("page");
     var order = url.searchParams.get("order");
+    var from = url.searchParams.get("from_s");
+    var to = url.searchParams.get("to_s");
     if(search){
         let headers = '';
-        if(order){
-            headers += `&order=${order}`;
+        if (order){
+            if (order === 'asc'){
+                document.querySelector('#more-price').classList.remove('active');
+                document.querySelector('#less-price').classList.add('active');
+            }
+            else if(order === 'desc'){
+                document.querySelector('#more-price').classList.add('active');
+                document.querySelector('#less-price').classList.remove('active');
+            }
+            headers += `&order=${order}`
+        }
+        if(from && to){
+            headers += `&from_s=${from}&to_s=${to}`
+        }
+        else if(from){
+            headers += `&from_s=${from}`;
+        }
+        else if(to){
+            headers += `&to_s=${to}`;
         }
         if(page){
             
@@ -18,11 +37,55 @@ document.addEventListener('DOMContentLoaded',()=>{
             load_data(search,1,headers);
         }
         document.querySelector('#filter-container').style.display = 'none';
+        document.querySelector('#less-price').href = setGetParameter(window.location.href,'order','asc');
+        document.querySelector('#more-price').href = setGetParameter(window.location.href,'order','desc');
     }
         
     else
         window.location.href = '/';
 });
+
+function setGetParameter(url,paramName, paramValue)
+{
+  var url = url;
+  var hash = location.hash;
+  url = url.replace(hash, '');
+  if (url.indexOf("?") >= 0)
+  {
+    var params = url.substring(url.indexOf("?") + 1).split("&");
+    var paramFound = false;
+    params.forEach(function(param, index) {
+      var p = param.split("=");
+      if (p[0] == paramName) {
+        params[index] = paramName + "=" + paramValue;
+        paramFound = true;
+      } 
+    });
+    if (!paramFound) params.push(paramName + "=" + paramValue);
+    url = url.substring(0, url.indexOf("?")+1) + params.join("&");
+  }
+  else
+    url += "?" + paramName + "=" + paramValue;
+  return (url + hash);
+}
+
+function removeParameter(key, sourceURL) {
+    var rtn = sourceURL.split("?")[0],
+        param,
+        params_arr = [],
+        queryString = (sourceURL.indexOf("?") !== -1) ? sourceURL.split("?")[1] : "";
+    if (queryString !== "") {
+        params_arr = queryString.split("&");
+        for (var i = params_arr.length - 1; i >= 0; i -= 1) {
+            param = params_arr[i].split("=")[0];
+            if (param === key) {
+                params_arr.splice(i, 1);
+            }
+        }
+        if (params_arr.length) rtn = rtn + "?" + params_arr.join("&");
+    }
+    return rtn;
+}
 
 function load_data(search,page,headers){
     let loader = '<div class="loader"></div>';
@@ -34,75 +97,75 @@ function load_data(search,page,headers){
     .then(responses => {
         document.querySelector('#search-container').innerHTML = '';
         // Asignar paginación
-        load_pagination(responses.num_pages,search,headers);
-        pagination_items(page,responses.has_next,responses.has_prev,search,headers);
-        document.querySelector('#filter-container').style.display = 'block';
-        document.querySelector('#less-price').href = `?s=${search}&order=asc`;
-        document.querySelector('#more-price').href = `?s=${search}&order=desc`;
-        responses.results.forEach(element => {
-            // Creación de Componentes HTML
-            const container = document.createElement('div');
-            const row = document.createElement('div');
-            const img_container = document.createElement('div');
-            const img = document.createElement('img');
-            const details_container = document.createElement('div');
-            const title_product = document.createElement('h3');
-            const price_container = document.createElement('div');
-            const price = document.createElement('h3');
-            const price_real = document.createElement('p');
-
-
-            // Agregando estilos
-            container.className = 'col-md-12 containers';
-            row.className = 'row';
-            img_container.className = 'col-md-4';
-            img.className = 'img-product';
-            details_container.className = 'col-md-8';
-            title_product.className = 'title-product';
-            price_container.className = 'col-md-12';
-            price.className = 'price';
-            price_real.className = 'discount';
-
-
-            //Apilando elementos
-            price_container.append(price);
-            price_container.append(price_real);
-            price_container.append(document.createElement('br'));
-            details_container.append(title_product);
-            details_container.append(document.createElement('br'));
-            details_container.append(price_container);
-            img_container.append(img);
-            row.append(img_container);
-            row.append(details_container);
-            container.append(row);
-            container.append(document.createElement('hr'));
-            //Llenando datos
-            img.src = element['img'];
-            title_product.innerHTML = element['nombre'];
-            price_real.innerHTML = `$.${element['precio']}`
-            let descuento = parseFloat(element['precio']) - parseFloat(element['desc']);
-            price.innerHTML = `$. ${descuento}`;
-            if (element['desc'] === 0){
-                price_real.remove();
-            }
-            else{
-                let discount_percentage = calculate_discount(parseFloat(element['precio']),descuento);
-                const discount = document.createElement('h4');
-                discount.className = 'discount-sale';
-                price_container.append(discount);
-                discount.innerHTML = `${discount_percentage}% OFF`;
-            }
+        if( responses.results.length>0){
+            load_pagination(responses.num_pages,search,headers);
+            pagination_items(page,responses.has_next,responses.has_prev,search,headers);
+            load_filters(responses.results,search);
+            document.querySelector('#filter-container').style.display = 'block';
             
-            document.querySelector('#search-container').append(container);
-            document.querySelector('#search-container').append(document.createElement('br'));
-        });
+            responses.results.forEach(element => {
+                // Creación de Componentes HTML
+                const container = document.createElement('div');
+                const row = document.createElement('div');
+                const img_container = document.createElement('div');
+                const img = document.createElement('img');
+                const details_container = document.createElement('div');
+                const title_product = document.createElement('h3');
+                const price_container = document.createElement('div');
+                const price = document.createElement('h3');
+                const price_real = document.createElement('p');
+    
+    
+                // Agregando estilos
+                container.className = 'col-md-12 containers';
+                row.className = 'row';
+                img_container.className = 'col-md-4';
+                img.className = 'img-product';
+                details_container.className = 'col-md-8';
+                title_product.className = 'title-product';
+                price_container.className = 'col-md-12';
+                price.className = 'price';
+                price_real.className = 'discount';
+    
+    
+                //Apilando elementos
+                price_container.append(price);
+                price_container.append(price_real);
+                price_container.append(document.createElement('br'));
+                details_container.append(title_product);
+                details_container.append(document.createElement('br'));
+                details_container.append(price_container);
+                img_container.append(img);
+                row.append(img_container);
+                row.append(details_container);
+                container.append(row);
+                container.append(document.createElement('hr'));
+                //Llenando datos
+                img.src = element['img'];
+                title_product.innerHTML = element['nombre'];
+                price_real.innerHTML = `$.${element['precio']}`
+                let descuento = parseFloat(element['precio']) - parseFloat(element['desc']);
+                price.innerHTML = `$. ${descuento}`;
+                if (element['desc'] === 0){
+                    price_real.remove();
+                }
+                else{
+                    let discount_percentage = calculate_discount(parseFloat(element['precio']),descuento);
+                    const discount = document.createElement('h4');
+                    discount.className = 'discount-sale';
+                    price_container.append(discount);
+                    discount.innerHTML = `${discount_percentage}% OFF`;
+                }
+                
+                document.querySelector('#search-container').append(container);
+                document.querySelector('#search-container').append(document.createElement('br'));
+            });
+        }
+        else{
+            document.querySelector('#search-container').innerHTML = '<div class="col-md-12"><h3>No hay artículos para tu búsqueda.</h3></div>';
+        }
+        
     })
-}
-
-function calculate_discount(num,discount){
-    percent = (1-(discount/num))*100;
-    percent = (Math.round(percent+"e+1") + "e-2");
-    return + percent;
 }
 
 function load_pagination(num_pages,search,headers){
@@ -154,4 +217,48 @@ function pagination_items(page,has_next,has_prev,search,headers){
         document.querySelector('#prev-page > a').href = `?s=${search}&page=${parseInt(page)-1}${headers}`
     }
     document.querySelector(`#pagination-page-${page}`).className = 'page-item active';
+}
+
+function load_filters(obj,search,headers){
+    var highest = Math.max.apply(Math, obj.map(function(o) { return o.precio; }))
+    console.log(obj);
+    var lowest = Math.min.apply(Math, obj.map(function(o) { return o.precio; }))
+    var medium = (highest+lowest)/2;
+    console.log(medium)
+    console.log(lowest)
+    console.log(highest)
+    var header_low = setGetParameter(window.location.href,'to_s',medium);
+    var header_high = setGetParameter(window.location.href,'from_s',medium);
+    header_high = setGetParameter(header_high,'to_s',highest);
+    
+    document.querySelector('#low-price-filter').innerHTML = `<a style="text-decoration: none;color: black;" href="${header_low}">Hasta $.${medium}</a>`;
+    document.querySelector('#high-price-filter').innerHTML = `<a style="text-decoration: none;color: black;" href="${header_high}">Entre $.${medium} - $.${highest}</a>`;
+
+    document.querySelector('#filter-btn').addEventListener('click', (e)=>{
+        load_filter_search();
+    })
+}
+
+function load_filter_search(){
+    var min = document.querySelector('#min-filter').value;
+    var max = document.querySelector('#max-filter').value;
+    var url_filter = '';
+    if (min && max){
+        url_filter = setGetParameter(window.location.href,'from_s',min);
+        url_filter = setGetParameter(url_filter,'to_s',max);
+    }
+    else{
+        if (min){
+            var url_filter = removeParameter('to_s',window.location.href);
+            url_filter = setGetParameter(url_filter,'from_s',min);
+            
+        }
+        else{
+            var url_filter = removeParameter('from_s',window.location.href);
+            url_filter = setGetParameter(url_filter,'to_s',max);
+        }
+    }
+    
+    console.log(url_filter);
+    window.location.href = url_filter;
 }

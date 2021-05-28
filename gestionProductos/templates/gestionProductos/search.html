@@ -2,8 +2,35 @@
 {% load static %}
 
 {% block body %}
+    <div class="col-md-3">
+        <div class="col-md-12">
+            <h3>Filtros</h3>
+            <br/>
+            <br/>
+            <div class="form-group">
+                <h5>Precio</h5>
+                <hr/>
+                <ul class="list-group">
+                    <li id="low-price-filter" class="list-group-item d-flex justify-content-between align-items-center"><a style="text-decoration: none;color: black;" href="#"></a></li>
+                    <li id="high-price-filter" class="list-group-item d-flex justify-content-between align-items-center"><a style="text-decoration: none;color: black;" href="#"></a></li>
+                </ul>
+                <br/>
+                <div class="form-row">
+                    <div class="col-md-5">
+                        <input id="min-filter" type="number" class="form-control" placeholder="Mínimo">
+                    </div>
+                    <div class="col-md-5">
+                        <input id="max-filter" type="number" class="form-control" placeholder="Máximo">
+                    </div>
+                    <div class="col-md-2">
+                        <button id="filter-btn" type="button" class="btn btn-light custom-buttom"><i class="fa fa-search"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <div class="col-md-10" style="margin: auto;">
+    </div>
+    <div class="col-md-9">
         <h3>Resultados</h3>
         <br/>
         <h4 id="title-search"></h4>
@@ -22,7 +49,7 @@
               </div>
         </div>
         <br/>
-        <div id="search-container" class="col-md-12 shadow p-3 mb-5 bg-white rounded-lg border-info">
+        <div id="search-container" class="col-md-12 shadow p-3 mb-5 bg-light rounded-lg border-info">
             <!-- <div class="col-md-12 containers">
                 <div class="row">
                     <div class="col-md-4">

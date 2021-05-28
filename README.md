@@ -47,8 +47,7 @@ Las API's utilizadas en el ejercicio son las siguientes:
  
 * **Respuesta Error:**
 
-  * **Code:** 401 UNAUTHORIZED <br />
-    **Content:** `{ error : "Log in" }`
+ Ninguno.
 
 * **Ejemplo:**
 
@@ -77,6 +76,7 @@ Las API's utilizadas en el ejercicio son las siguientes:
  
    `<str:cat>` // Categoría
     `<int:num>` // Número de página
+    
    **Opcional:**
  
    `order=[asc/desc]`

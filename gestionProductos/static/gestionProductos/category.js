@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     let url = new URL(url_string);
     let cat = url.searchParams.get("c");
     let order = url.searchParams.get("order");
-    var initialdata = document.querySelector('#nav-category');
+    var initialdata = document.querySelector('#navb-category');
     initialdata.setAttribute('class', 'nav-item active');
     // Validación
     if(cat){

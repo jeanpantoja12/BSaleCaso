@@ -108,6 +108,7 @@ function load_data(cat,num,headers){
                     load_more.innerHTML = 'Cargar más';
                     document.querySelector('#button-container').append(load_more);
                     load_more.addEventListener('click',()=>{
+                        load_more.classList.remove('active');
                         let num_page = num+1;
                         load_data(cat,num_page,headers);
                     })

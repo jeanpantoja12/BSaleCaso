@@ -8,8 +8,6 @@ document.addEventListener('DOMContentLoaded',()=>{
     let order = url.searchParams.get("order");
     let from = url.searchParams.get("from_s");
     let to = url.searchParams.get("to_s");
-    var initialdata = document.querySelector('#navb-inicio');
-    initialdata.setAttribute('class', 'nav-item active');
     // Validación
     if(search){
         let headers = '';

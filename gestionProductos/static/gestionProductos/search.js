@@ -8,6 +8,8 @@ document.addEventListener('DOMContentLoaded',()=>{
     let order = url.searchParams.get("order");
     let from = url.searchParams.get("from_s");
     let to = url.searchParams.get("to_s");
+    var initialdata = document.querySelector('#nav-index');
+    initialdata.setAttribute('class', 'nav-item active');
     // Validación
     if(search){
         let headers = '';
@@ -39,6 +41,7 @@ document.addEventListener('DOMContentLoaded',()=>{
             load_data(search,1,headers);
         }
         document.querySelector('#filter-container').style.display = 'none';
+        document.querySelector('#search-form').innerHTML = `${search}`;
         document.querySelector('#less-price').href = setGetParameter(window.location.href,'order','asc');
         document.querySelector('#more-price').href = setGetParameter(window.location.href,'order','desc');
     }
